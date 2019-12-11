@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/jasmaa/submit-server/evaluator/internal"
+	"github.com/jasmaa/submit-server/evaluator/internal/handlers"
 )
 
 func main() {
