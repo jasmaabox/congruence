@@ -1,17 +1,19 @@
+// Package handlers contains router handlers
 package handlers
 
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/jasmaa/submit-server/evaluator/internal/runner"
 )
 
-type dummy struct {
-	Foo string `json:"foo,omitempty"`
-	Bar string `json:"bar,omitempty"`
-}
-
-func GetDummy(w http.ResponseWriter, req *http.Request) {
-	//test := [5]int{1, 2, 3, 4, 5}
-	d := dummy{"foo", "bar"}
-	json.NewEncoder(w).Encode(&d)
+// RunCodeHandler handles code submission requests
+func RunCodeHandler(w http.ResponseWriter, r *http.Request) {
+	runReq := runner.RunRequest{
+		Lang:    r.FormValue("lang"),
+		Content: r.FormValue("content"),
+	}
+	resp := runReq.Run()
+	json.NewEncoder(w).Encode(&resp)
 }
