@@ -11,8 +11,8 @@ import (
 // RunCodeHandler handles code submission requests
 func RunCodeHandler(w http.ResponseWriter, r *http.Request) {
 	runReq := runner.RunRequest{
-		Lang:    r.FormValue("lang"),
-		Content: r.FormValue("content"),
+		Lang:      r.FormValue("lang"),
+		ProjectID: r.FormValue("project_id"),
 	}
 	resp := runReq.Run()
 	json.NewEncoder(w).Encode(&resp)
