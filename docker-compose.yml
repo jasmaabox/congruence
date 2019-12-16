@@ -8,6 +8,8 @@ services:
             - 3000
         ports:
             - "3000:3000" # Map for now
+        links:
+            - evaluator:evaluator
         command: node index.js
     
     evaluator:

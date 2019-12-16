@@ -3,10 +3,17 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/jasmaa/submit-server/evaluator/internal/runner"
 )
+
+// RunDummyHandler serves a dummy page
+func RunDummyHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "hello world")
+}
 
 // RunCodeHandler handles code submission requests
 func RunCodeHandler(w http.ResponseWriter, r *http.Request) {
