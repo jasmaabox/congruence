@@ -16,6 +16,6 @@ func main() {
 
 	router.HandleFunc("/runCode", handlers.RunCodeHandler).Methods("POST")
 
-	fmt.Println("Starting server at 8000...")
+	fmt.Println("Starting evaluator on 8000...")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }

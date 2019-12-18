@@ -1,8 +1,29 @@
 .base-container {
+    display: flex;
     margin: 2%;
-    color: green;
 }
 
-p {
-    color: blue;
+.home-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+    background-color: aliceblue;
+}
+
+.login-container {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin-top: 5%;
+    margin-right: 30%;
+    margin-left: 30%;
+    padding: 2%;
+}
+
+.result-container {
+    display: flex;
+    flex: 1;
+    justify-content: space-evenly;
 }

@@ -11,6 +11,11 @@ app.set('view engine', 'pug');
 app.get('/', (req, res) => {
     res.render('home', { title: 'Home', message: 'hi there' });
 });
+app.get('/login', (req, res) => {
+    res.render('login', { title: 'Login' });
+});
+
+// Dummy pages
 app.get('/dummy', (req, res) => {
     axios.get("http://evaluator:8000/dummy")
         .then(response => {
@@ -26,11 +31,11 @@ app.get('/dummy2', (req, res) => {
         project_id: '12345',
     }))
         .then(response => {
-            res.send({ message: response.data });
+            res.render('testResult', { title: 'Dummy2', ...response.data });
         })
         .catch(error => {
             console.log(error);
         });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Starting web server on ${port}...`));
