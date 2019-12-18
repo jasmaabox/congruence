@@ -58,13 +58,14 @@ func parseScore(result string) ([]bool, error) {
 
 // Scores python unittest
 func scorePython(projectID string) (string, []bool) {
+
 	// Run unittest
-	cmd := exec.Command("python", fmt.Sprintf("./runtime/%v/public.py", projectID))
+	cmd := exec.Command("python3", fmt.Sprintf("./runtime/%v/public.py", projectID))
 	out, _ := cmd.CombinedOutput()
 
 	// Parse score
 	q := string(out)
-	lines := strings.Split(q, "\r\n")
+	lines := strings.Split(q, "\n")
 	score, err := parseScore(lines[0])
 	if err != nil {
 		return "Error", nil
