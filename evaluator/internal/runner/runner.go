@@ -26,6 +26,7 @@ type RunResponse struct {
 func (r *RunRequest) Run() RunResponse {
 	var resp string
 	var score []bool
+
 	switch r.Lang {
 	case "python":
 		resp, score = scorePython(r.ProjectID)

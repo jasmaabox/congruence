@@ -14,10 +14,11 @@ ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
 RUN apt-get -qq -y install python3
 
 # Build evaluator
-WORKDIR /app
-ENV SRC_DIR=/go/src/github.com/jasmaa/submit-server/evaluator
-ADD . $SRC_DIR
-RUN cd $SRC_DIR; go build -o evaluator cmd/app.go; cp evaluator /app/
+WORKDIR /usr/src/app
 
-# TEMP: Copy dummy project for now
-COPY runtime /app/runtime
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY . .
+RUN go build -o evaluator cmd/app.go
