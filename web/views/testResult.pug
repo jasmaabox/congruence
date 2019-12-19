@@ -5,11 +5,11 @@ block content
     .result-container
         .card(style="padding: 2%;")
             ul.list-group
-                each val, i in score
-                    if val
-                        li.list-group-item(style="background-color:#5cb85c;color:white;") #{i+1}
+                each val, i in all_tests
+                    if scores[val]
+                        li.list-group-item(style="background-color:#5cb85c;color:white;") #{val}
                     else
-                        li.list-group-item(style="background-color:#d9534f;color:white;") #{i+1}
+                        li.list-group-item(style="background-color:#d9534f;color:white;") #{val}
                     
         .card(style="padding: 2%;")
             p(style="white-space: pre-wrap;") #{content}

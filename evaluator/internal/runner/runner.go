@@ -1,11 +1,11 @@
 package runner
 
 import (
-	"errors"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os/exec"
-	"regexp"
-	"strings"
 )
 
 // RunRequest represents code submission input
@@ -17,60 +17,66 @@ type RunRequest struct {
 
 // RunResponse represents code submission output
 type RunResponse struct {
-	ID      string `json:"id,omitempty"`
-	Score   []bool `json:"score,omitempty"`
-	Content string `json:"content,omitempty"`
+	ID       string          `json:"id,omitempty"`
+	Content  string          `json:"content,omitempty"`
+	AllTests []string        `json:"all_tests,omitempty"`
+	Scores   map[string]bool `json:"scores,omitempty"`
 }
 
 // Run runs code request
 func (r *RunRequest) Run() RunResponse {
 	var resp string
-	var score []bool
+	var allTests []string
+	var scores map[string]bool
 
 	switch r.Lang {
 	case "python":
-		resp, score = scorePython(r.ProjectID)
+		resp, allTests, scores = scorePython(r.ProjectID)
 	default:
 		resp = "Language not found"
 	}
 
 	return RunResponse{
-		ID:      r.ID,
-		Content: resp,
-		Score:   score,
+		ID:       r.ID,
+		Content:  resp,
+		AllTests: allTests,
+		Scores:   scores,
 	}
-}
-
-// Parse score array from test results
-func parseScore(result string) ([]bool, error) {
-	re := regexp.MustCompile(`^(F|\.)+$`)
-	if re.MatchString(result) {
-		q := re.FindString(result)
-		score := make([]bool, len(q))
-		for i, c := range q {
-			score[i] = c == '.'
-		}
-
-		return score, nil
-	}
-
-	return nil, errors.New("Could not parse score")
 }
 
 // Scores python unittest
-func scorePython(projectID string) (string, []bool) {
+func scorePython(projectID string) (string, []string, map[string]bool) {
 
-	// Run unittest
-	cmd := exec.Command("python3", fmt.Sprintf("./runtime/%v/public.py", projectID))
-	out, _ := cmd.CombinedOutput()
+	// Run test
+	cmd := exec.Command("pytest", "-q", "public.py")
+	cmd.Dir = fmt.Sprintf("./runtime/%v", projectID)
+	out, err := cmd.CombinedOutput()
 
-	// Parse score
-	q := string(out)
-	lines := strings.Split(q, "\n")
-	score, err := parseScore(lines[0])
+	fmt.Println(string(out))
+
+	// Read test list
+	allTestsJSON, err := ioutil.ReadFile(fmt.Sprintf("./runtime/%v/.pytest_cache/v/cache/nodeids", projectID))
 	if err != nil {
-		return "Error", nil
+		log.Fatal(err)
+	}
+	var allTests []string
+	json.Unmarshal([]byte(allTestsJSON), &allTests)
+
+	// Read scores
+	failedJSON, err := ioutil.ReadFile(fmt.Sprintf("./runtime/%v/.pytest_cache/v/cache/lastfailed", projectID))
+	if err != nil {
+		log.Fatal(err)
+	}
+	var scores map[string]bool
+	json.Unmarshal([]byte(failedJSON), &scores)
+
+	for _, k := range allTests {
+		if _, ok := scores[k]; ok {
+			scores[k] = false
+		} else {
+			scores[k] = true
+		}
 	}
 
-	return q, score
+	return string(out), allTests, scores
 }
