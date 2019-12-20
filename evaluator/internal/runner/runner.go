@@ -52,8 +52,6 @@ func scorePython(projectID string) (string, []string, map[string]bool) {
 	cmd.Dir = fmt.Sprintf("./runtime/%v", projectID)
 	out, err := cmd.CombinedOutput()
 
-	fmt.Println(string(out))
-
 	// Read test list
 	allTestsJSON, err := ioutil.ReadFile(fmt.Sprintf("./runtime/%v/.pytest_cache/v/cache/nodeids", projectID))
 	if err != nil {
