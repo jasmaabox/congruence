@@ -1,16 +1,16 @@
 extends base.pug
 
 block content
-    form.card.login-container
+    form.card.login-container(action="/login", method="post", enctype="application/x-www-form-urlencoded")
 
         h1(align="center") Login
         hr
         .form-group
             label(for="username") Username
-            input#username.form-control(type="text")
+            input#username.form-control(type="text", name="username")
         .form-group
             label(for="password") Password
-            input#password.form-control(type="text")
+            input#password.form-control(type="password", name="password")
 
         button.btn.btn-primary(type="submit") Login
         
