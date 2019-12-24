@@ -1,4 +1,5 @@
 const express = require('express');
+const { body, check, validationResult } = require('express-validator');
 const axios = require('axios');
 const qs = require('querystring');
 const passport = require('passport');
@@ -63,35 +64,86 @@ app.get('/', (req, res) => {
 });
 
 app.route('/login')
-    .get((req, res) => {
+    .get((_, res) => {
         res.render('login', { title: 'Login' });
     })
-    .post(passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
-        res.send("wow success");
-    });
+    .post([
+        body('username')
+            .trim()
+            .escape(),
+        body('password')
+            .trim()
+            .escape(),
+        body('confirm_password')
+            .trim()
+            .escape(),
+    ],
+        passport.authenticate('local', { failureRedirect: '/login' }),
+        (req, res) => {
+            res.send("wow success");
+        });
 
 app.route('/createAccount')
-    .get((req, res) => {
+    .get((_, res) => {
         res.render('createAccount', { title: 'Create Account' });
     })
-    .post((req, res) => {
-        const { username, password, confirm_password } = req.body;
+    .post([
+        body('username')
+            .trim()
+            .escape(),
+        body('password')
+            .trim()
+            .escape(),
+        body('confirm_password')
+            .trim()
+            .escape(),
 
-        if(password != confirm_password){
-            res.redirect('/createAccount');
+        check('username')
+            .not().isEmpty().withMessage('Username is required'),
+        check('username')
+            .custom((value, _) => {
+                return pool.query(`SELECT * FROM users WHERE username=$1`, [value])
+                    .then(results => {
+                        if (results.rowCount > 0) {
+                            return Promise.reject("User already exists");
+                        }
+                    })
+            }),
+        check('password')
+            .not().isEmpty().withMessage('Password is required'),
+        check('confirm_password').custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Passwords do not match');
+            }
+            return true;
+        }),
+    ], (req, res) => {
+
+        const { username, password } = req.body;
+
+        // Form validation
+        let errors = validationResult(req).array().map(({ msg }) => msg);
+        if (errors.length > 0) {
+            res.render('createAccount', {
+                title: 'Create Account',
+                errors: errors
+            });
             return;
         }
 
+        // Try to create user
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt);
 
-        // MAKE USERNAMES UNIQUE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, hash], error => {
+        pool.query(`INSERT INTO users (username, password) VALUES ($1, $2)`, [username, hash], error => {
             if (!error) {
                 res.redirect('/login');
             }
             else {
-                res.redirect('/createAccount');
+                res.render('createAccount', {
+                    title: 'Create Account',
+                    errors: ['Could not create account']
+                });
             }
         });
     });
@@ -132,7 +184,7 @@ app.route('/dummy3')
     })
     .post((req, res) => {
         const { username, password } = req.body;
-        pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, password], error => {
+        pool.query(`INSERT INTO users (username, password) VALUES ($1, $2)`, [username, password], error => {
             if (!error) {
                 res.json({ status: 'success', message: `${username} added` })
             }

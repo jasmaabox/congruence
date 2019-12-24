@@ -1,10 +1,21 @@
 extends base.pug
 
 block content
-    form.card.login-container(action="/createAccount", method="post", enctype="application/x-www-form-urlencoded")
+    form.card.login-container.needs-validation(
+        action="/createAccount"
+        method="post"
+        enctype="application/x-www-form-urlencoded"
+    )
 
         h1(align="center") Create Account
         hr
+
+        if !!errors
+            .alert.alert-danger(role="alert") Error
+                ul
+                    each val in errors
+                        li #{val}
+
         .form-group
             label(for="username") Username
             input#username.form-control(type="text", name="username")
