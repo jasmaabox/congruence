@@ -1,6 +1,6 @@
 nav.navbar.navbar-expand-lg.navbar-light.bg-light
     
-    a.navbar-brand(href="/") Navbar
+    a.navbar-brand(href="/") Congruence
     button.navbar-toggler(
         type="button"
         data-toggle="collapse"
@@ -13,9 +13,13 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
 
     div#navbarSupportedContent.collapse.navbar-collapse
         ul.navbar-nav.mr-auto
-            li.nav-item
-                a.nav-link(href="#") Test1
-            li.nav-item
-                a.nav-link(href="#") Test2
-            li.nav-item
-                a.nav-link(href="#") Test3
+        
+        if user
+            .m-1.m-lg-1
+                a.btn.btn-outline-danger(href="/logout") Logout
+        else
+            .m-1.m-lg-1
+                a.btn.btn-outline-primary(href="/login") Login
+            .m-1.m-lg-1
+                a.btn.btn-outline-info(href="/createAccount") Sign Up
+        

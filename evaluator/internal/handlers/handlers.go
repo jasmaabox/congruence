@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/jasmaa/submit-server/evaluator/internal/runner"
+	"github.com/jasmaa/congruence/evaluator/internal/runner"
 )
 
 // RunDummyHandler serves a dummy page

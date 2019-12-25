@@ -1,4 +1,4 @@
-module github.com/jasmaa/submit-server/evaluator
+module github.com/jasmaa/congruence/evaluator
 
 go 1.12
 

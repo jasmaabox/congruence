@@ -58,15 +58,43 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: false, save
 app.use(passport.initialize());
 app.use(passport.session());
 
+const redirectNonAuth = (req, res, next) => {
+    if (req.user) {
+        return next();
+    }
+    else {
+        res.redirect('/login');
+    }
+}
+
+const redirectAuth = (req, res, next) => {
+    if (req.user) {
+        res.redirect('/');
+    }
+    else {
+        return next();
+    }
+}
+
 // === Routes ===
 app.get('/', (req, res) => {
-    res.render('home', { title: 'Home', message: 'hi there' });
+    if (req.user) {
+        res.render('profile', {
+            title: 'Home',
+            user: req.user
+        })
+    }
+    else {
+        res.render('home', { title: 'Home' });
+    }
 });
 
 app.route('/login')
-    .get((_, res) => {
-        res.render('login', { title: 'Login' });
-    })
+    .get(
+        redirectAuth,
+        (_, res) => {
+            res.render('login', { title: 'Login' });
+        })
     .post([
         body('username')
             .trim()
@@ -78,15 +106,20 @@ app.route('/login')
             .trim()
             .escape(),
     ],
-        passport.authenticate('local', { failureRedirect: '/login' }),
-        (req, res) => {
-            res.send("wow success");
-        });
+        passport.authenticate('local', { successReturnToOrRedirect: '/', failureRedirect: '/login' })
+    );
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
 
 app.route('/createAccount')
-    .get((_, res) => {
-        res.render('createAccount', { title: 'Create Account' });
-    })
+    .get(
+        redirectAuth,
+        (_, res) => {
+            res.render('createAccount', { title: 'Create Account' });
+        })
     .post([
         body('username')
             .trim()
@@ -117,37 +150,37 @@ app.route('/createAccount')
             }
             return true;
         }),
-    ], (req, res) => {
+    ],
+        (req, res) => {
 
-        const { username, password } = req.body;
+            const { username, password } = req.body;
 
-        // Form validation
-        let errors = validationResult(req).array().map(({ msg }) => msg);
-        if (errors.length > 0) {
-            res.render('createAccount', {
-                title: 'Create Account',
-                errors: errors
-            });
-            return;
-        }
-
-        // Try to create user
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
-
-        pool.query(`INSERT INTO users (username, password) VALUES ($1, $2)`, [username, hash], error => {
-            if (!error) {
-                res.redirect('/login');
-            }
-            else {
+            // Form validation
+            let errors = validationResult(req).array().map(({ msg }) => msg);
+            if (errors.length > 0) {
                 res.render('createAccount', {
                     title: 'Create Account',
-                    errors: ['Could not create account']
+                    errors: errors
                 });
+                return;
             }
-        });
-    });
 
+            // Try to create user
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(password, salt);
+
+            pool.query(`INSERT INTO users (username, password) VALUES ($1, $2)`, [username, hash], error => {
+                if (!error) {
+                    res.redirect('/login');
+                }
+                else {
+                    res.render('createAccount', {
+                        title: 'Create Account',
+                        errors: ['Could not create account']
+                    });
+                }
+            });
+        });
 
 // Dummy pages
 app.get('/dummy', (req, res) => {
