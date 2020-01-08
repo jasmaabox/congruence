@@ -44,5 +44,7 @@ app.get('/', (req, res) => {
 
 app.use('/', require('./controllers/auth'));
 app.use('/', require('./controllers/dummy'));
+app.use('/', require('./controllers/admin'));
+app.use('/api/v1', require('./controllers/api'));
 
 app.listen(port, () => console.log(`Starting web server on ${port}...`));

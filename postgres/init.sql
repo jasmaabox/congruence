@@ -5,7 +5,7 @@ CREATE TABLE users (
     PASSWORD VARCHAR(255) NOT NULL,
     EMAIL VARCHAR(255) NOT NULL UNIQUE,
     VERIFIED_ACCOUNT BOOLEAN,
-    USER_LEVEL INTEGER, /* 0:student, 1:instructor, 2:admin */
+    USER_LEVEL INTEGER, /* 0:student, 1:instructor, 2:admin, 3:super admin */
     ENROLLED_COURSES INTEGER[]
 );
 
@@ -30,4 +30,4 @@ CREATE TABLE submissions (
 
 /* Create admin user */
 INSERT INTO users (USERNAME, PASSWORD, EMAIL, VERIFIED_ACCOUNT, USER_LEVEL)
-VALUES ('admin', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO', 'admin@gmail.com', true, 2);
+VALUES ('admin', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO', 'admin@gmail.com', true, 3);

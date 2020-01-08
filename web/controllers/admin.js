@@ -2,8 +2,11 @@
 // Admin routes
 
 const express = require('express');
-const { body, check, validationResult } = require('express-validator');
-const bcrypt = require('bcryptjs');
-const { pool, passport, redirectAuth } = require('../config');
+const { pool } = require('../config');
+const { verifyLevel } = require('../middleware');
 
 const router = express.Router();
+
+
+
+module.exports = router;
