@@ -1,6 +1,6 @@
-# Submit Server
+# Congruence
 
-WIP submit server web app
+WIP simple and straight-forward submit server
 
 # Build and Run
 

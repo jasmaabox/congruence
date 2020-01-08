@@ -1,3 +1,6 @@
+// dbConfig.js
+// Database initialization
+
 require('dotenv').config()
 
 const { Pool } = require('pg')
@@ -10,4 +13,4 @@ const pool = new Pool({
   ssl: isProduction,
 })
 
-module.exports = { pool }
+module.exports = pool;
