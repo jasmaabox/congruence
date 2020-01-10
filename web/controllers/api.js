@@ -43,9 +43,9 @@ router.post('/user/create', verifyLevel(2), cleanEntries("username", "email"), (
     const hash = bcrypt.hashSync(password, salt);
 
     pool.query(
-        `INSERT INTO users (username, email, password, verified_account, user_level, enrolled_courses)
-        VALUES ($1, $2, $3, false, $4, $5)`,
-        [username, email, hash, 0, []],
+        `INSERT INTO users (username, email, password, verified_account, user_level, association_id)
+        VALUES ($1, $2, $3, false, $4, $5, $6)`,
+        [username, email, hash, 0, 1],
         error => {
             if (!error) {
                 res.sendStatus(200);

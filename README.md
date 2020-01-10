@@ -1,6 +1,6 @@
 # Congruence
 
-WIP simple and straight-forward submit server
+WIP simple and straight-forward autograde server
 
 # Build and Run
 

@@ -12,14 +12,22 @@ nav.navbar.navbar-expand-lg.navbar-light.bg-light
         span.navbar-toggler-icon
 
     div#navbarSupportedContent.collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-        
-        if user
-            .m-1.m-lg-1
-                a.btn.btn-outline-danger(href="/logout") Logout
-        else
-            .m-1.m-lg-1
-                a.btn.btn-outline-primary(href="/login") Login
-            .m-1.m-lg-1
-                a.btn.btn-outline-info(href="/createAccount") Sign Up
-        
+        ul.navbar-nav.ml-auto
+            if user
+                li.dropdown
+                    .btn.btn-outline-secondary.dropdown-toggle(
+                        data-toggle="dropdown",
+                        aria-haspopup="true",
+                        aria-expanded="false"
+                    )
+                        i.fa.fa-user-circle-o.m-1.m-lg-1(aria-hidden="true")
+                        span #{user.username}
+                    .dropdown-menu.dropdown-menu-right
+                        .dropdown-divider
+                        a.dropdown-item(href="/logout") Logout
+
+            else
+                li.m-1.m-lg-1
+                    a.btn.btn-outline-primary(href="/login") Login
+                li.m-1.m-lg-1
+                    a.btn.btn-outline-info(href="/createAccount") Sign Up

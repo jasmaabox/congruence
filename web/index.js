@@ -26,9 +26,7 @@ app.use(passport.session());
 app.get('/', (req, res) => {
     if (req.user) {
         if (req.user.user_level >= 2) {
-            res.render('adminConsole',
-                { title: 'Admin', user: req.user }
-            );
+            res.redirect('/admin');
         }
         else {
             res.render('profile', {
@@ -44,7 +42,7 @@ app.get('/', (req, res) => {
 
 app.use('/', require('./controllers/auth'));
 app.use('/', require('./controllers/dummy'));
-app.use('/', require('./controllers/admin'));
+app.use('/admin', require('./controllers/admin'));
 app.use('/api/v1', require('./controllers/api'));
 
 app.listen(port, () => console.log(`Starting web server on ${port}...`));

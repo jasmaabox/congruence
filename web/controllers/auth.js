@@ -45,9 +45,9 @@ router.route('/createAccount')
         const hash = bcrypt.hashSync(password, salt);
 
         pool.query(
-            `INSERT INTO users (username, email, password, verified_account, user_level, enrolled_courses)
-            VALUES ($1, $2, $3, false, 0, $4)`,
-            [username, email, hash, []],
+            `INSERT INTO users (username, email, password, verified_account, user_level, association_id)
+            VALUES ($1, $2, $3, false, 0, 1)`,
+            [username, email, hash],
             error => {
                 if (!error) {
                     res.redirect('/login');
@@ -55,7 +55,7 @@ router.route('/createAccount')
                 else {
                     res.render('createAccount', {
                         title: 'Create Account',
-                        errors: ['Could not create account']
+                        errors: [error]
                     });
                 }
             });

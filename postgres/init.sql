@@ -1,33 +1,55 @@
 
+CREATE TABLE associations (
+    id SERIAL PRIMARY KEY,
+    association_name VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE users (
-    ID SERIAL PRIMARY KEY,
-    USERNAME VARCHAR(255) NOT NULL UNIQUE,
-    PASSWORD VARCHAR(255) NOT NULL,
-    EMAIL VARCHAR(255) NOT NULL UNIQUE,
-    VERIFIED_ACCOUNT BOOLEAN,
-    USER_LEVEL INTEGER, /* 0:student, 1:instructor, 2:admin, 3:super admin */
-    ENROLLED_COURSES INTEGER[]
+    id SERIAL PRIMARY KEY,
+    association_id INTEGER NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    verified_account BOOLEAN,
+    user_level INTEGER /* 0:student, 1:instructor, 2:admin, 3:super admin */
 );
 
 CREATE TABLE courses (
-    ID SERIAL PRIMARY KEY,
-    NAME VARCHAR(255) NOT NULL,
-    ASSIGNMENTS INTEGER[]
+    id SERIAL PRIMARY KEY,
+    course_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE users_courses (
+    user_id INTEGER REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    course_id INTEGER REFERENCES courses (id) on UPDATE CASCADE,
+    CONSTRAINT id PRIMARY KEY (user_id, course_id)
 );
 
 CREATE TABLE assignments (
-    ID SERIAL PRIMARY KEY,
-    NAME VARCHAR(255) NOT NULL,
-    POINTS INTEGER
+    id SERIAL PRIMARY KEY,
+    course_id INTEGER NOT NULL,
+    assignment_name VARCHAR(255) NOT NULL,
+    points INTEGER
 );
 
 CREATE TABLE submissions (
-    ID SERIAL PRIMARY KEY,
-    SUBMIT_TIMESTAMP TIMESTAMP WITH TIME ZONE,
-    SUBMITTER_ID INTEGER,
-    POINTS_EARNED INTEGER
+    id SERIAL PRIMARY KEY,
+    assignment_id INTEGER NOT NULL,
+    submitter_id INTEGER NOT NULL,
+    submit_timestamp TIMESTAMP WITH TIME ZONE,
+    points_earned INTEGER
 );
 
+
 /* Create admin user */
-INSERT INTO users (USERNAME, PASSWORD, EMAIL, VERIFIED_ACCOUNT, USER_LEVEL)
-VALUES ('admin', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO', 'admin@gmail.com', true, 3);
+INSERT INTO users (username, password, email, verified_account, user_level, association_id)
+VALUES ('admin', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO', 'admin@gmail.com', true, 3, 1);
+
+/* dummy entries */
+INSERT INTO associations (association_name) VALUES ('Awesome School');
+INSERT INTO courses (course_name) VALUES ('Programming 1');
+INSERT INTO courses (course_name) VALUES ('Algorithms and Data Structures');
+INSERT INTO courses (course_name) VALUES ('Analysis of Algorithms');
+INSERT INTO courses (course_name) VALUES ('Software Design');
+INSERT INTO courses (course_name) VALUES ('AI with LISP');
+INSERT INTO courses (course_name) VALUES ('Graphics');

@@ -1,0 +1,13 @@
+extends ../base.pug
+
+block content
+
+    h1 Admin Console
+
+    .card
+        .card-header Fields
+        ul.list-group.list-group-flush
+            li.list-group-item.d-flex.justify-content-between.align-items-center Users
+                a.badge.badge-primary.badge-pill(href="/admin/users") Manage
+            li.list-group-item.d-flex.justify-content-between.align-items-center Courses
+                a.badge.badge-primary.badge-pill(href="/admin/courses") Manage
