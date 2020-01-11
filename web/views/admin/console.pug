@@ -2,12 +2,16 @@ extends ../base.pug
 
 block content
 
-    h1 Admin Console
+    h1.m-3 Admin Console
 
     .card
         .card-header Fields
         ul.list-group.list-group-flush
             li.list-group-item.d-flex.justify-content-between.align-items-center Users
-                a.badge.badge-primary.badge-pill(href="/admin/users") Manage
+                div
+                    a.badge.badge-info.badge-pill.m-1(href="#") + Add
+                    a.badge.badge-primary.badge-pill.m-1(href="/admin/users") Manage
             li.list-group-item.d-flex.justify-content-between.align-items-center Courses
-                a.badge.badge-primary.badge-pill(href="/admin/courses") Manage
+                div
+                    a.badge.badge-info.badge-pill.m-1(href="#") + Add
+                    a.badge.badge-primary.badge-pill.m-1(href="/admin/courses") Manage

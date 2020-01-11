@@ -2,21 +2,27 @@ extends ../base.pug
 
 block content
 
-    h1 Users
+    .d-flex.justify-content-between.align-items-center.m-3
+        h1 Users #{totalCount}
+        .btn.btn-info + Add
 
-    ul.list-group
+    ul.list-group.m-3
         each val, i in users
-            li.list-group-item #{val.username}
-    
-    nav.d-flex.flex-column.justify-content-center.align-items-center
+            li.list-group-item.d-flex.justify-content-between.align-items-center #{val.username}
+                a.badge.badge-primary.badge-pill(href="#") Edit
+
+    nav.d-flex.flex-column.justify-content-center.align-items-center.mt-5
         ul.pagination
             li.page-item
                 a.page-link(href=prev_href) Prev
-            li.page-item
-                a.page-link(href="#") 1
-            li.page-item
-                a.page-link(href="#") 2
-            li.page-item
-                a.page-link(href="#") 3
+            
+            each val, i in tabs
+                if val == curr_page
+                    li.page-item.active
+                        a.page-link(href=`/admin/users?page=${val}`) #{val}
+                else
+                    li.page-item
+                        a.page-link(href=`/admin/users?page=${val}`) #{val}
+            
             li.page-item
                 a.page-link(href=next_href) Next
