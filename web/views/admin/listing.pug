@@ -3,12 +3,15 @@ extends ../base.pug
 block content
 
     .d-flex.justify-content-between.align-items-center.m-3
-        h1 Users #{totalCount}
-        .btn.btn-info + Add
+        .d-flex.flex-row.justify-content-center.align-items-center
+            a.btn.btn-secondary.mr-3(href="/admin") ← Back
+            h1 #{tableName} #{totalCount}
+
+        a.btn.btn-info(href="#") + Add
 
     ul.list-group.m-3
-        each val, i in users
-            li.list-group-item.d-flex.justify-content-between.align-items-center #{val.username}
+        each val, i in entries
+            li.list-group-item.d-flex.justify-content-between.align-items-center #{val}
                 a.badge.badge-primary.badge-pill(href="#") Edit
 
     nav.d-flex.flex-column.justify-content-center.align-items-center.mt-5
@@ -19,10 +22,10 @@ block content
             each val, i in tabs
                 if val == curr_page
                     li.page-item.active
-                        a.page-link(href=`/admin/users?page=${val}`) #{val}
+                        a.page-link(href=`/admin/${tableName}?page=${val}`) #{val}
                 else
                     li.page-item
-                        a.page-link(href=`/admin/users?page=${val}`) #{val}
+                        a.page-link(href=`/admin/${tableName}?page=${val}`) #{val}
             
             li.page-item
                 a.page-link(href=next_href) Next

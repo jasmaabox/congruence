@@ -17,6 +17,7 @@ CREATE INDEX n_idx ON users USING btree (id);
 
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
+    association_id INTEGER NOT NULL,
     course_name VARCHAR(255) NOT NULL
 );
 
@@ -48,12 +49,13 @@ VALUES ('admin', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO',
 
 /* dummy entries */
 INSERT INTO associations (association_name) VALUES ('Awesome School');
-INSERT INTO courses (course_name) VALUES ('Programming 1');
-INSERT INTO courses (course_name) VALUES ('Algorithms and Data Structures');
-INSERT INTO courses (course_name) VALUES ('Analysis of Algorithms');
-INSERT INTO courses (course_name) VALUES ('Software Design');
-INSERT INTO courses (course_name) VALUES ('AI with LISP');
-INSERT INTO courses (course_name) VALUES ('Graphics');
+INSERT INTO courses (course_name, association_id) VALUES ('Programming 1', 1);
+INSERT INTO courses (course_name, association_id) VALUES ('Algorithms and Data Structures', 1);
+INSERT INTO courses (course_name, association_id) VALUES ('Analysis of Algorithms', 1);
+INSERT INTO courses (course_name, association_id) VALUES ('Software Design', 1);
+INSERT INTO courses (course_name, association_id) VALUES ('AI with LISP', 1);
+INSERT INTO courses (course_name, association_id) VALUES ('Graphics', 1);
+
 INSERT INTO users (username, password, email, verified_account, user_level, association_id)
 VALUES ('a', '$2a$10$siCgGUWF8SLY3faKiy4bSOq3D5upZ6UZaoswP7XWPW6lP9PqwCMBO', 'a@gmail.com', true, 0, 1);
 INSERT INTO users (username, password, email, verified_account, user_level, association_id)
