@@ -1,0 +1,19 @@
+extends ../base.pug
+
+block content
+
+    .d-flex.justify-content-between.align-items-center.m-3
+        .d-flex.flex-row.justify-content-center.align-items-center
+            a.btn.btn-secondary.mr-3(href="/admin") ← Back
+            h1 #{tableName}
+
+    form.card.m-3.p-3(action=action, method="post")
+        .card-body
+            each val, i in fields
+                .form-group
+                    label(for="val") #{val.column_name} - #{val.data_type}
+                    input.form-control.form-control-sm(type="text", id=val.column_name, name=val.column_name)
+            
+            button.btn.btn-primary(type="submit") Submit
+
+    

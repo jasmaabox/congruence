@@ -4,14 +4,22 @@ block content
 
     h1.m-3 Admin Console
 
-    .card
-        .card-header Fields
-        ul.list-group.list-group-flush
-            li.list-group-item.d-flex.justify-content-between.align-items-center Users
-                div
-                    a.badge.badge-info.badge-pill.m-1(href="#") + Add
-                    a.badge.badge-primary.badge-pill.m-1(href="/admin/users") Manage
-            li.list-group-item.d-flex.justify-content-between.align-items-center Courses
-                div
-                    a.badge.badge-info.badge-pill.m-1(href="#") + Add
-                    a.badge.badge-primary.badge-pill.m-1(href="/admin/courses") Manage
+    .row
+        .col-md-6
+            .card.m-3
+                .card-header Tickets
+                ul.list-group.list-group-flush
+
+        .col-md-6
+            .card.m-3
+                .card-header Fields
+                ul.list-group.list-group-flush
+                    li.list-group-item.d-flex.justify-content-between.align-items-center Users
+                        div
+                            a.badge.badge-info.badge-pill.m-1(href="/admin/users/new") + Add
+                            a.badge.badge-primary.badge-pill.m-1(href="/admin/users") Manage
+                    li.list-group-item.d-flex.justify-content-between.align-items-center Courses
+                        div
+                            a.badge.badge-info.badge-pill.m-1(href="/admin/courses/new") + Add
+                            a.badge.badge-primary.badge-pill.m-1(href="/admin/courses") Manage
+            

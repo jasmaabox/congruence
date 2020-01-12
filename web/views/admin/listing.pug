@@ -5,9 +5,9 @@ block content
     .d-flex.justify-content-between.align-items-center.m-3
         .d-flex.flex-row.justify-content-center.align-items-center
             a.btn.btn-secondary.mr-3(href="/admin") ← Back
-            h1 #{tableName} #{totalCount}
+            h1 #{tableName}
 
-        a.btn.btn-info(href="#") + Add
+        a.btn.btn-info(href=`/admin/${tableName}/new`) + Add
 
     ul.list-group.m-3
         each val, i in entries
