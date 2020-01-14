@@ -6,6 +6,7 @@ CREATE TABLE associations (
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    n_idx SERIAL,
     association_id INTEGER NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -13,10 +14,10 @@ CREATE TABLE users (
     verified_account BOOLEAN,
     user_level INTEGER /* 0:student, 1:instructor, 2:admin, 3:super admin */
 );
-CREATE INDEX n_idx ON users USING btree (id);
 
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
+    n_idx SERIAL,
     association_id INTEGER NOT NULL,
     course_name VARCHAR(255) NOT NULL
 );

@@ -37,7 +37,7 @@ const generateListing = (tableName, summarize) => (req, res) => {
             resolve();
         }))
         .then(_ => pool.query(
-            `SELECT * FROM ${tableName} WHERE association_id=$1 AND id>$2 ORDER BY id ASC LIMIT $3`,
+            `SELECT * FROM ${tableName} WHERE association_id=$1 AND n_idx>$2 ORDER BY n_idx ASC LIMIT $3`,
             [req.user.association_id, (page - 1) * ENTRIES_PER_PAGE, ENTRIES_PER_PAGE],
         ))
         .then(result => {
@@ -134,7 +134,7 @@ router.get('/courses', verifyLevel(2),
 
 router.route('/users/new')
     .get(verifyLevel(2),
-        generateEditing('users', '/admin/users/new', ['association_id']),
+        generateEditing('users', '/admin/users/new', ['association_id', 'n_idx']),
     )
     .post(verifyLevel(2), (req, res) => {
         const { id, username, password, email, verified_account, user_level } = req.body;
@@ -146,10 +146,13 @@ router.route('/users/new')
             .then(result => {
                 res.redirect('/admin');
             })
+            .catch(error => {
+                res.send(error);
+            });
     });
 router.route('/courses/new')
     .get(verifyLevel(2),
-        generateEditing('courses', '#', ['association_id']),
+        generateEditing('courses', '#', ['association_id', 'n_idx']),
     );
 
 module.exports = router;

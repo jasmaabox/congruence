@@ -26,3 +26,7 @@ RUN go mod download
 
 COPY . .
 RUN go build -o evaluator cmd/app.go
+
+# Set permissions
+#RUN chown root /
+#RUN chmod 711 /
